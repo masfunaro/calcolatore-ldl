@@ -1,0 +1,88 @@
+<!DOCTYPE html>
+<html lang="it">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no" />
+  <title>Calcolatore LDL</title>
+  <link rel="manifest" href="manifest.json" />
+  <meta name="theme-color" content="#4CAF50"/>
+  <link rel="apple-touch-icon" href="icon.png">
+  <script>
+    if ('serviceWorker' in navigator) {
+      window.addEventListener('load', () => {
+        navigator.serviceWorker.register('service-worker.js');
+      });
+    }
+  </script>
+  <style>
+    body {
+      font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, Helvetica, Arial, sans-serif;
+      background-color: #f4f4f9;
+      padding: 20px;
+      max-width: 500px;
+      margin: auto;
+    }
+    h1 {
+      color: #333;
+      text-align: center;
+    }
+    label {
+      margin-top: 12px;
+      display: block;
+    }
+    input[type="number"], button {
+      padding: 12px;
+      font-size: 1rem;
+      width: 100%;
+      margin-top: 10px;
+      border-radius: 6px;
+      border: 1px solid #ccc;
+    }
+    button {
+      background-color: #4CAF50;
+      color: white;
+      border: none;
+      cursor: pointer;
+    }
+    button:active {
+      background-color: #388e3c;
+    }
+    #result {
+      margin-top: 20px;
+      font-size: 1.2rem;
+      font-weight: bold;
+      text-align: center;
+    }
+  </style>
+</head>
+<body>
+  <h1>Calcolatore LDL</h1>
+  <label>Colesterolo Totale (mg/dL):</label>
+  <input type="number" id="total" step="0.1">
+  <label>HDL (mg/dL):</label>
+  <input type="number" id="hdl" step="0.1">
+  <label>Trigliceridi (mg/dL):</label>
+  <input type="number" id="trig" step="0.1">
+  <button onclick="calcolaLDL()">Calcola LDL</button>
+  <div id="result"></div>
+  <script>
+    function calcolaLDL() {
+      const total = parseFloat(document.getElementById("total").value);
+      const hdl = parseFloat(document.getElementById("hdl").value);
+      const trig = parseFloat(document.getElementById("trig").value);
+      const result = document.getElementById("result");
+
+      if (isNaN(total) || isNaN(hdl) || isNaN(trig)) {
+        result.textContent = "⚠️ Inserisci tutti i valori richiesti.";
+        return;
+      }
+      if (trig >= 400) {
+        result.textContent = "⚠️ Formula non valida con trigliceridi ≥ 400 mg/dL.";
+        return;
+      }
+      const ldl = total - hdl - (trig / 5);
+      result.textContent = `LDL stimato: ${ldl.toFixed(1)} mg/dL`;
+    }
+  </script>
+</body>
+</html>
